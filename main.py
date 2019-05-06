@@ -6,6 +6,7 @@ matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
+from matplotlib import pyplot as plt
 from matplotlib import style
 style.use("ggplot")
 
@@ -15,7 +16,7 @@ import numpy as np
 
 LARGE_FONT = "Verdana 12"
 
-f = Figure(figsize=(5,5), dpi=100)
+f = Figure()
 a = f.add_subplot(111)
 
 def animate(i):
@@ -30,7 +31,10 @@ def animate(i):
             yList.append(int(y))
     a.clear()
     a.plot(xList, yList)
+    a.set_title("Price info")
 
+def popupmsg(ar):
+    pass
 
 class SeaofBTCapp(tk.Tk):
 
@@ -42,6 +46,16 @@ class SeaofBTCapp(tk.Tk):
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+
+        menubar = tk.Menu(container)
+        filemenu = tk.Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Save settings", command=lambda: popupmsg("Not supported"))
+        filemenu.add_separator()
+        filemenu.add_command(label="Exit", command=quit)
+
+        menubar.add_cascade(label="File", menu=filemenu)
+        tk.Tk.config(self, menu=menubar)
+
 
         self.frames = {}
         for F in (StartPage, BTCe_Page):
@@ -119,5 +133,6 @@ class BTCe_Page(tk.Frame):
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
 app = SeaofBTCapp()
+app.geometry("1280x720")
 ani = animation.FuncAnimation(f, animate, interval=1000)
 app.mainloop()
